@@ -4,8 +4,8 @@ import psycopg2
 fiatList = ["AUD", "BRL", "EUR", "GBP", "RUB",
             "TRY", "UAH", "ZAR", "IDRT", "PLN", "RON", "ARS"]
 
-crytoList = ['BTC', 'ETH', 'ADA', 'USDT', 'XRP', 'LINK', 'MANA', 'XLM', 'BNB', 'DOGE', 'TRX', 'ALGO', 'BUSD', 'ENJ', 'DOT', 'NEAR', 'UNI',
-             'SAND', 'GRT', 'MATIC', 'AXS', 'IMX', 'GALA', 'CHZ', 'SOL', 'AVAX', 'FTM', 'APE', 'GAL', 'OP', 'ATOM', 'ARB', 'ID']
+crytoList = ['BTC', 'ETH', 'ADA', 'USDT', 'XRP', 'LINK', 'MANA', 'XLM', 'BNB', 'DOGE', 'TRX', 'ALGO', 'BUSD', 'ENJ', 'DOT', 'NEAR',
+             'SAND', 'GRT', 'MATIC', 'AXS', 'IMX', 'GALA', 'CHZ', 'SOL', 'AVAX', 'FTM', 'APE', 'GAL', 'ATOM', 'ARB', 'ID']
 advCash = ["RUB", "EUR"]
 
 # Replace the placeholders with your actual database connection details
@@ -47,6 +47,20 @@ def main():
                     sql = f"insert into public.tbt_assets(symbol,pair,price,lastupdate)values('{symbol}', '{currency}',{float(obj['price']) * thbPrice},CURRENT_TIMESTAMP)"
 
                 cursor.execute(sql)
+
+            # For bitkub
+            response = requests.request(
+                "GET", f"https://api.bitkub.com/api/market/ticker?sym=THB_{symbol}")
+            thb = float(response.json()[f"THB_{symbol}"]["last"])
+            cursor.execute(
+                f"select * from tbt_assets where symbol='{symbol}' and pair='THB'")
+
+            sql = f"update public.tbt_assets set symbol='{symbol}', pair='THB', price={thb}, lastupdate=CURRENT_TIMESTAMP where symbol='{symbol}' and pair='{currency}'"
+            if cursor.fetchone() == None:
+                sql = f"insert into public.tbt_assets(symbol,pair,price,lastupdate)values('{symbol}', 'THB',{thb},CURRENT_TIMESTAMP)"
+
+            cursor.execute(sql)
+
         print(f"---------------------------")
 
     conn.commit()
