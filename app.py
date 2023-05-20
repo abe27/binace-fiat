@@ -1,12 +1,13 @@
 import requests
 import psycopg2
 
-fiatList = ["AUD", "BRL", "EUR", "GBP", "RUB",
-            "TRY", "UAH", "ZAR", "IDRT", "PLN", "RON", "ARS"]
+# fiatList = ["AUD", "BRL", "EUR", "GBP", "RUB",
+#             "TRY", "UAH", "ZAR", "IDRT", "PLN", "RON", "ARS"]
+fiatList = ["AUD", "BRL", "EUR", "RUB"]
 
 crytoList = ['BTC', 'ETH', 'ADA', 'USDT', 'XRP', 'LINK', 'MANA', 'XLM', 'BNB', 'DOGE', 'TRX', 'ALGO', 'BUSD', 'ENJ', 'DOT', 'NEAR',
              'SAND', 'GRT', 'MATIC', 'AXS', 'GALA', 'CHZ', 'SOL', 'AVAX', 'FTM', 'APE', 'GAL', 'ATOM', 'ARB', 'ID']
-advCash = ["RUB", "EUR", "GBP"]
+advCash = ["USDT", "BUSD", "BNB", "BTC", "ETH"]
 
 # Replace the placeholders with your actual database connection details
 host = 'localhost'
